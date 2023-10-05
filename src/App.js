@@ -1,6 +1,8 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
 import './App.css';
+import BootstrapTest from './BootstrapTest';
 
 const EmpItem = styled.div`
     padding: 20px;
@@ -39,16 +41,16 @@ export const Button = styled.button`
 class WhoAmI extends Component {
   constructor(props) {
     super(props);
-  this.state = {
-    years: 27,
-    text: '+++',
-    position:''
+    this.state = {
+      years: 27,
+      text: '+++',
+      position: ''
+    }
   }
-}
 
   nextYear = () => {
-    this.setState(state => ({years: state.years + 1}))
-  } 
+    this.setState(state => ({ years: state.years + 1 }))
+  }
 
   commitInputChanges = (e) => {
     /* console.log(e.target.value); */
@@ -57,27 +59,27 @@ class WhoAmI extends Component {
     })
   }
 
-  render () {
-    const {name, surname, link} = this.props;
-    const {position, years} = this.state;
-    return (  
+  render() {
+    const { name, surname, link } = this.props;
+    const { position, years } = this.state;
+    return (
       <EmpItem active>
-          <Button onClick={this.nextYear}>{this.state.text}</Button>
-          <Header>
-              My name is {name()}, surname - {surname}, 
-              age - {years}, 
-              position - {position} 
-          </Header>
+        <Button onClick={this.nextYear}>{this.state.text}</Button>
+        <Header>
+          My name is {name()}, surname - {surname},
+          age - {years},
+          position - {position}
+        </Header>
 
-          <a href={link}>My profile</a>
+        <a href={link}>My profile</a>
 
-          <form>
-            <span>Введите должность</span>
-            <input type="text" onChange={this.commitInputChanges} />
-          </form>
+        <form>
+          <span>Введите должность</span>
+          <input type="text" onChange={this.commitInputChanges} />
+        </form>
 
       </EmpItem>
-  );
+    );
   }
 }
 
@@ -86,11 +88,48 @@ const Wrapper = styled.div`
     margin: 80px auto 0 auto;
 `;
 
+const DynamicGreating = (props) => {
+  return (
+    <div className={'mb-3 p-3 border border-' + props.color}>
+      {/* {props.children} */}
+      {
+        React.Children.map(props.children, child => {
+          return React.cloneElement(child, { className: 'shadow p-3 m-3 border rounded' })
+        })
+      }
+    </div>
+  )
+}
+
+const HelloGreating = () => {
+  return(
+  <div style={{'width': '600px', 'margin': '0 auto'}}>
+      <DynamicGreating color={'primary'}>
+              <h2>Hello world!</h2>
+      </DynamicGreating>
+  </div>
+  )
+}
+
 function App() {
   return (
     <Wrapper className="App">
-        <WhoAmI name={() => {return 'John'}} surname="Smith" link="faceboor.com"/>
-        <WhoAmI name={() => {return 'Alex'}} surname="Shepard" link="vk.com"/>
+      <HelloGreating/>
+      <BootstrapTest
+        left = {
+          <DynamicGreating color={'primary'}>
+            <h2>This weel was hard</h2>
+            <h2>Hello world!</h2>
+          </DynamicGreating>
+        }
+        right = {
+          <DynamicGreating color={'primary'}>
+            <h2>RIGHT</h2>
+          </DynamicGreating>
+        }
+      />
+      <WhoAmI name={() => { return 'John' }} surname="Smith" link="faceboor.com" />
+      <WhoAmI name={() => { return 'Alex' }} surname="Shepard" link="vk.com" />
     </Wrapper>
   );
 }
