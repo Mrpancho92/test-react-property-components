@@ -5,13 +5,14 @@ import Container from 'react-bootstrap/Container';
 import './App.css';
 
 class Form extends Component {
-    state = {
-        advOpen: false
-    }
-    
+        state = {
+            advOpen: false
+        }
+  
     componentDidMount() {
         setTimeout(this.handleClick, 3000);
     }
+
     handleClick = () => {
         this.setState(({advOpen}) => ({
          advOpen: !advOpen

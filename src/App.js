@@ -70,9 +70,9 @@ class Form extends Component {
     render() {
         const {temp} = this.state;
         return (
-            <Container>
-                <div style={{"text-align":"center","margin-top":"20px"}}>В Москве {temp}°С</div>
-                <button
+            <Container className="position-relative">
+                <div className="w-50 border mt-5 p-3 m-auto">В Москве {temp}°С</div>
+                <button type="button" className="border mt-4 position-absolute top-30 start-50 translate-middle"
                     // className="button button__main button__long"
                     // disabled={newItemLoading}
                     // style={{ 'display': charEnded ? 'none' : 'block' }}
