@@ -1,137 +1,188 @@
-import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import styled from 'styled-components';
+import React, {Component} from 'react';
+import 'bootstrap/dist/css/bootstrap.css'; 
+import Container from 'react-bootstrap/Container';
+import WeatherService from './services/WeatherService';
 import './App.css';
-import BootstrapTest from './BootstrapTest';
 
-const EmpItem = styled.div`
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0,0,0, 0.2);
-    a {
-        display: block;
-        margin: 10px 0 10px 0;
-        color: ${props => props.active ? 'orange' : 'green'};
+class Form extends Component {
+    // myRef = React.createRef();
+  /*   constructor(props) {
+        super(props);
+        this.myRef = React.createRef();
+    } */
+
+    state = {
+        lat: null/* 55.7504461 */,
+        lon: null/* 37.6174943 */,
+        temp:null
     }
-    input {
-      display: block;
-      margin-top: 10px;
+
+
+  /*   componentDidMount() {
+        this.myRef.current.focus();
+    } */
+
+    setInputRef = (elem) => {
+        this.myRef = elem;
     }
-`;
-const Header = styled.h2`
-    font-size: 22px;
-`;
-export const Button = styled.button`
-      display: block;
-      padding: 5px 15px;
-      background-color: gold;
-      border: 1px solid rgba(0,0,0, 0.2);
-      box-shadow: 5px 5px 10px rgba(0,0,0, 0.2);
-`;
-/* function WhoAmI ({name, surname, link}) {
-  return (
-      <div>
-        <h1>My name is {name()}, surname - {surname} </h1>
-        <a href={link}>My profile</a>
-      </div>
-  );
-} */
 
-class WhoAmI extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      years: 27,
-      text: '+++',
-      position: ''
+    focusFirstTI = () => {
+        if (this.myRef) {
+            this.myRef.focus();
+        }
+        // this.myRef.current.focus(); - current не будет в колбэк рефа
     }
-  }
 
-  nextYear = () => {
-    this.setState(state => ({ years: state.years + 1 }))
-  }
+    weatherservice = new WeatherService();
 
-  commitInputChanges = (e) => {
-    /* console.log(e.target.value); */
-    this.setState({
-      position: e.target.value
-    })
-  }
+  /*     componentDidMount() {
+        this.onRequest();
+    } */  
+    onRequestButton = () => {
+        this.onRequest();
+        this.onRequest();
+    }
 
-  render() {
-    const { name, surname, link } = this.props;
-    const { position, years } = this.state;
-    return (
-      <EmpItem active>
-        <Button onClick={this.nextYear}>{this.state.text}</Button>
-        <Header>
-          My name is {name()}, surname - {surname},
-          age - {years},
-          position - {position}
-        </Header>
+    onRequest = () => {        
+    this.weatherservice.getCitylocation()
+                .then(this.onCharListLoaded)
+                .catch('this.onError');     
+    }
+ 
+    onCharListLoaded = (cityLocation) => {
+        this.setState({
+             lat: cityLocation.lat,
+             lon: cityLocation.lon
+        });
 
-        <a href={link}>My profile</a>
+        if (this.state.lat === null || this.state.lon === null ) return
+        this.weatherservice.getCityWeater(this.state.lat, this.state.lon)
+        .then(this.onCharListLoaded2)
+        .catch('this.onError2'); 
+    }
 
-        <form>
-          <span>Введите должность</span>
-          <input type="text" onChange={this.commitInputChanges} />
-        </form>
-
-      </EmpItem>
-    );
-  }
-}
-
-const Wrapper = styled.div`
-    width: 600px;
-    margin: 80px auto 0 auto;
-`;
-
-const DynamicGreating = (props) => {
-  return (
-    <div className={'mb-3 p-3 border border-' + props.color}>
-      {/* {props.children} */}
-      {
-        React.Children.map(props.children, child => {
-          return React.cloneElement(child, { className: 'shadow p-3 m-3 border rounded' })
-        })
-      }
-    </div>
-  )
-}
-
-const HelloGreating = () => {
-  return(
-  <div style={{'width': '600px', 'margin': '0 auto'}}>
-      <DynamicGreating color={'primary'}>
-              <h2>Hello world!</h2>
-      </DynamicGreating>
-  </div>
-  )
+     onCharListLoaded2 = (cityWeater) => {
+        this.setState({
+            temp: cityWeater.main.temp.toFixed(1)
+       });  
+        } 
+    
+    render() {
+        const {temp} = this.state;
+        return (
+            <Container>
+                <div style={{"text-align":"center","margin-top":"20px"}}>В Москве {temp}°С</div>
+                <button
+                    // className="button button__main button__long"
+                    // disabled={newItemLoading}
+                    // style={{ 'display': charEnded ? 'none' : 'block' }}
+                    onClick={() => this.onRequestButton()}>
+                    <div>load weather</div>
+                </button>
+                <form className="w-50 border mt-5 p-3 m-auto">
+                    <div className="mb-3">
+                        <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
+                        <input ref={this.setInputRef} type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+                        <textarea onClick={this.focusFirstTI} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                </form>
+            </Container>
+        )
+    }
 }
 
 function App() {
-  return (
-    <Wrapper className="App">
-      <HelloGreating/>
-      <BootstrapTest
-        left = {
-          <DynamicGreating color={'primary'}>
-            <h2>This weel was hard</h2>
-            <h2>Hello world!</h2>
-          </DynamicGreating>
-        }
-        right = {
-          <DynamicGreating color={'primary'}>
-            <h2>RIGHT</h2>
-          </DynamicGreating>
-        }
-      />
-      <WhoAmI name={() => { return 'John' }} surname="Smith" link="faceboor.com" />
-      <WhoAmI name={() => { return 'Alex' }} surname="Shepard" link="vk.com" />
-    </Wrapper>
-  );
+    return (
+        <Form/>
+    );
 }
 
 export default App;
+
+
+
+// const arrr = [6,5,3,1,8,7,4,2,12,10,11,13,28,21,22,18,15,14];
+
+// 5,6,3,1,8,7,4,2   j=0  i=0
+// 5,3,6,1,8,7,4,2   j=1
+// 5,3,1,6,8,7,4,2   j=2
+// 5,3,1,6,8,7,4,2   j=3
+// 5,3,1,6,7,8,4,2   j=4
+// 5,3,1,6,7,4,8,2   j=5
+// 5,3,1,6,7,4,2,8   j=6
+
+// 3,5,1,6,7,4,2,8   j=0  i=1
+// 3,1,5,6,7,4,2,8   j=1
+// 3,1,5,6,7,4,2,8   j=2
+// 3,1,5,6,7,4,2,8   j=3
+// 3,1,5,6,4,7,2,8   j=4
+// 3,1,5,6,4,2,7,8   j=5
+// 3,1,5,6,4,2,7,8   j=6
+
+// 1,3,5,6,4,2,7,8   j=0  i=2
+// 1,3,5,6,4,2,7,8   j=1
+// 1,3,5,6,4,2,7,8   j=2
+// 1,3,5,4,6,2,7,8   j=3
+// 1,3,5,4,2,6,7,8   j=4
+// 1,3,5,4,2,6,7,8   j=5
+// 1,3,5,4,2,6,7,8   j=6
+
+// 1,3,5,4,2,6,7,8   j=0  i=3
+// 1,3,5,4,2,6,7,8   j=1
+// 1,3,4,5,2,6,7,8   j=2
+// 1,3,4,2,5,6,7,8   j=3
+// 1,3,4,2,5,6,7,8   j=4
+// 1,3,4,2,5,6,7,8   j=5
+// 1,3,4,2,5,6,7,8   j=6
+
+// 1,3,4,2,5,6,7,8   j=0  i=4
+// 1,3,4,2,5,6,7,8   j=1
+// 1,3,2,4,5,6,7,8   j=2
+// 1,3,2,4,5,6,7,8   j=3
+// 1,3,2,4,5,6,7,8   j=4
+// 1,3,2,4,5,6,7,8   j=5
+// 1,3,2,4,5,6,7,8   j=6
+
+// 1,3,2,4,5,6,7,8   j=0  i=5
+// 1,2,3,4,5,6,7,8   j=1
+// 1,2,3,4,5,6,7,8   j=2
+// 1,2,3,4,5,6,7,8   j=3
+// 1,2,3,4,5,6,7,8   j=4
+// 1,2,3,4,5,6,7,8   j=5
+// 1,2,3,4,5,6,7,8   j=6
+
+/*  for (let i = 0; i < arrr.length-1; i++) {
+    for (let j = 0; j < arrr.length; j++){
+        let box;
+        if (arrr[j] > arrr[j + 1]) {
+            box = arrr[j + 1];
+            arrr[j + 1] = arrr[j];
+            arrr[j] = box;
+        }
+    }
+ }
+console.log(arrr);
+
+const arr = [6,5,3,1];
+
+function bubbleSortConcept2(arr) {
+    let swapped;
+    do {
+      swapped = false;
+      console.log(arr);
+      arr.forEach((item, index) => {
+        if (item > arr[index + 1]) {
+          // Save the value to a variable so we don't lose it
+          let temp = item;
+          arr[index] = arr[index + 1];
+          arr[index + 1] = temp;
+          swapped = true;
+        }
+      })
+      console.log(swapped);
+    } while (swapped);
+  }
+  bubbleSortConcept2(arr); */
