@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/test-react-property-components/static/css/main.ad292c7c.css",
+    "main.js": "/test-react-property-components/static/js/main.edbc7a96.js",
+    "index.html": "/test-react-property-components/index.html",
+    "main.ad292c7c.css.map": "/test-react-property-components/static/css/main.ad292c7c.css.map",
+    "main.edbc7a96.js.map": "/test-react-property-components/static/js/main.edbc7a96.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ad292c7c.css",
+    "static/js/main.edbc7a96.js"
+  ]
+}
