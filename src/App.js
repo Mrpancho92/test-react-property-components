@@ -38,10 +38,10 @@ class Form extends Component {
       componentDidMount() {
         this.onRequest();
     }  
-    onRequestButton = () => {
+    /* onRequestButton = () => {
         this.onRequest();
         this.onRequest();
-    }
+    } */
 
     onRequest = () => {        
     this.weatherservice.getCitylocation()
@@ -71,12 +71,12 @@ class Form extends Component {
         const {temp} = this.state;
         return (
             <Container className="position-relative">
-                <div className="w-50 border mt-5 p-3 m-auto">В Москве {temp}°С</div>
+                <div className="w-50 border mt-5 p-3 m-auto">В Москве {temp} °С</div>
                 <button type="button" className="border mt-4 position-absolute top-30 start-50 translate-middle"
                     // className="button button__main button__long"
                     // disabled={newItemLoading}
                     // style={{ 'display': charEnded ? 'none' : 'block' }}
-                    onClick={() => this.onRequestButton()}>
+                    onClick={this.onRequestButton}>
                     <div>load weather</div>
                 </button>
                 <form className="w-50 border mt-5 p-3 m-auto">
