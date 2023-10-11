@@ -35,9 +35,9 @@ class Form extends Component {
 
     weatherservice = new WeatherService();
 
-  /*     componentDidMount() {
+      componentDidMount() {
         this.onRequest();
-    } */  
+    }  
     onRequestButton = () => {
         this.onRequest();
         this.onRequest();
