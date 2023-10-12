@@ -35,14 +35,14 @@ class Form extends Component {
 
     weatherservice = new WeatherService();
 
-    /*     componentDidMount() {
+        componentDidMount() {
         this.onRequest();
-    }  */ 
+    }  
 
-    onRequestButton = () => {
+  /*   onRequestButton = () => {
         this.onRequest();
         this.onRequest();
-    } 
+    } */ 
 
     onRequest = () => {        
     this.weatherservice.getCitylocation()
@@ -185,3 +185,7 @@ function bubbleSortConcept2(arr) {
     } while (swapped);
   }
   bubbleSortConcept2(arr); */
+
+//   "homepage": "https://Mrpancho92.github.io/test-react-property-components",
+    // "predeploy": "npm run build",
+    // "deploy": "gh-pages -d build",
