@@ -14,7 +14,7 @@ class Form extends Component {
     state = {
         lat: null/* 55.7504461 */,
         lon: null/* 37.6174943 */,
-        temp:null
+        temp: null
     }
 
 
@@ -35,18 +35,19 @@ class Form extends Component {
 
     weatherservice = new WeatherService();
 
-      componentDidMount() {
+    /*     componentDidMount() {
         this.onRequest();
-    }  
-    /* onRequestButton = () => {
+    }  */ 
+
+    onRequestButton = () => {
         this.onRequest();
         this.onRequest();
-    } */
+    } 
 
     onRequest = () => {        
     this.weatherservice.getCitylocation()
                 .then(this.onCharListLoaded)
-                .catch('this.onError');     
+                .catch('this.onError');  
     }
  
     onCharListLoaded = (cityLocation) => {
@@ -54,24 +55,22 @@ class Form extends Component {
              lat: cityLocation.lat,
              lon: cityLocation.lon
         });
-
-        if (this.state.lat === null || this.state.lon === null ) return
+       /*  if (this.state.lat === null || this.state.lon === null ) return
         this.weatherservice.getCityWeater(this.state.lat, this.state.lon)
-        .then(this.onCharListLoaded2)
-        .catch('this.onError2'); 
+                .then(this.onCharListLoaded2)
+                .catch('this.onError2'); */
     }
 
-     onCharListLoaded2 = (cityWeater) => {
+    /*  onCharListLoaded2 = (cityWeater) => {
         this.setState({
             temp: cityWeater.main.temp.toFixed(1)
        });  
-        } 
+        }  */
     
     render() {
-        const {temp} = this.state;
         return (
             <Container className="position-relative">
-                <div className="w-50 border mt-5 p-3 m-auto">В Москве {temp} °С</div>
+                <div className="w-50 border mt-5 p-3 m-auto">В Москве {this.state.lat} °С</div>
                 <button type="button" className="border mt-4 position-absolute top-30 start-50 translate-middle"
                     // className="button button__main button__long"
                     // disabled={newItemLoading}
