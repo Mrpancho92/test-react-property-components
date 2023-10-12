@@ -14,7 +14,7 @@ class Form extends Component {
     state = {
         lat: null/* 55.7504461 */,
         lon: null/* 37.6174943 */,
-        temp: null
+        temp: '1111232'
     }
 
 
